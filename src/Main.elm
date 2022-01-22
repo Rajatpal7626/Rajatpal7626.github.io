@@ -11,14 +11,14 @@ import Html.Events exposing (onClick, onInput)
 type alias Model =
   { item : String,
     array : List Int,
-    sortedArray : List Int
-    --hist : List (Stack.Stack SplitList)
+    sortedArray : List Int,
+    hist : List (List ( List Int))
   }
 
 
 init : Model
 init =
-  { item = "" , array = [] , sortedArray = [] } --, hist = [Stack.empty] }
+  { item = "" , array = [] , sortedArray = []  , hist = [] }
 
 
 type Msg
@@ -35,7 +35,9 @@ update msg model =
     AddToList ->
       { model | array= model.array ++ [ String.toInt model.item|> Maybe.withDefault 0] }
     Sort ->
-      { model | sortedArray = MergeSort.mergeSort model.array }
+      let sa = MergeSort.mergeSort model.array
+      in
+        { model | sortedArray = Tuple.first sa , hist = Tuple.second sa }
 
 
 -- VIEW
@@ -60,6 +62,11 @@ view model =
         div []
         [ text ("Sorted  :" ),
           text (List.map String.fromInt model.sortedArray |> String.join "    ")      
+        ],
+        div []
+        [ text ("Path  :" ),
+          text (List.foldl (\x a ->a ++ (Debug.toString x) ++ "====>" ) "" model.hist),
+          text (Debug.toString model.sortedArray)      
         ]
     ] 
 

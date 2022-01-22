@@ -4449,7 +4449,7 @@ var $elm$core$Set$toList = function (_v0) {
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
-var $author$project$Main$init = {array: _List_Nil, item: '', sortedArray: _List_Nil};
+var $author$project$Main$init = {array: _List_Nil, hist: _List_Nil, item: '', sortedArray: _List_Nil};
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
 };
@@ -5468,99 +5468,133 @@ var $elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var $author$project$MergeSort$split = function (stack) {
+var $author$project$MergeSort$split = function (param) {
 	if ($author$project$MergeSort$canSplit(
 		A2(
 			$elm$core$Maybe$withDefault,
 			A2($author$project$MergeSort$SplitList, _List_Nil, $author$project$MergeSort$UNSORTED),
-			$ntreu14$elm_stack$Stack$pop(stack).a))) {
+			$ntreu14$elm_stack$Stack$pop(param.a).a))) {
 		var _v0 = A2(
 			$elm$core$Maybe$withDefault,
 			A2($author$project$MergeSort$SplitList, _List_Nil, $author$project$MergeSort$UNSORTED),
-			$ntreu14$elm_stack$Stack$peek(stack));
+			$ntreu14$elm_stack$Stack$peek(param.a));
 		var list = _v0.list;
 		var status = _v0.status;
 		return $author$project$MergeSort$split(
-			A2(
-				$ntreu14$elm_stack$Stack$push,
-				A2(
-					$author$project$MergeSort$SplitList,
-					A2(
-						$elm$core$List$take,
-						$elm$core$Basics$ceiling(
-							$elm$core$List$length(list) / 2),
-						list),
-					($elm$core$Basics$ceiling(
-						$elm$core$List$length(list) / 2) === 1) ? $author$project$MergeSort$SORTED : $author$project$MergeSort$UNSORTED),
+			_Utils_Tuple2(
 				A2(
 					$ntreu14$elm_stack$Stack$push,
 					A2(
 						$author$project$MergeSort$SplitList,
 						A2(
-							$elm$core$List$drop,
+							$elm$core$List$take,
 							$elm$core$Basics$ceiling(
 								$elm$core$List$length(list) / 2),
 							list),
-						($elm$core$Basics$floor(
+						($elm$core$Basics$ceiling(
 							$elm$core$List$length(list) / 2) === 1) ? $author$project$MergeSort$SORTED : $author$project$MergeSort$UNSORTED),
-					$ntreu14$elm_stack$Stack$pop(stack).b)));
+					A2(
+						$ntreu14$elm_stack$Stack$push,
+						A2(
+							$author$project$MergeSort$SplitList,
+							A2(
+								$elm$core$List$drop,
+								$elm$core$Basics$ceiling(
+									$elm$core$List$length(list) / 2),
+								list),
+							($elm$core$Basics$floor(
+								$elm$core$List$length(list) / 2) === 1) ? $author$project$MergeSort$SORTED : $author$project$MergeSort$UNSORTED),
+						$ntreu14$elm_stack$Stack$pop(param.a).b)),
+				A2($elm$core$List$cons, param.a, param.b)));
 	} else {
-		return stack;
+		return param;
 	}
 };
-var $author$project$MergeSort$merge = function (stack) {
-	if ($ntreu14$elm_stack$Stack$size(stack) > 1) {
+var $author$project$MergeSort$merge = function (param) {
+	if ($ntreu14$elm_stack$Stack$size(param.a) > 1) {
 		var rightSplitList = A2(
 			$elm$core$Maybe$withDefault,
 			A2($author$project$MergeSort$SplitList, _List_Nil, $author$project$MergeSort$UNSORTED),
 			$ntreu14$elm_stack$Stack$pop(
-				$ntreu14$elm_stack$Stack$pop(stack).b).a);
+				$ntreu14$elm_stack$Stack$pop(param.a).b).a);
 		var leftSplitList = A2(
 			$elm$core$Maybe$withDefault,
 			A2($author$project$MergeSort$SplitList, _List_Nil, $author$project$MergeSort$UNSORTED),
-			$ntreu14$elm_stack$Stack$pop(stack).a);
+			$ntreu14$elm_stack$Stack$pop(param.a).a);
 		return A2($author$project$MergeSort$canMerge, leftSplitList, rightSplitList) ? $author$project$MergeSort$merge(
-			A2(
-				$ntreu14$elm_stack$Stack$push,
+			_Utils_Tuple2(
 				A2(
-					$author$project$MergeSort$SplitList,
-					A3(
-						$elm$core$List$foldl,
-						F2(
-							function (x, a) {
-								return A3(
-									$author$project$MergeSort$mergeItem,
-									leftSplitList.list,
-									x,
-									_Utils_update(
-										a,
-										{updated: false}));
-							}),
-						A3($author$project$MergeSort$SortedList, _List_Nil, 0, false),
-						rightSplitList.list).slist,
-					$author$project$MergeSort$SORTED),
-				$ntreu14$elm_stack$Stack$pop(
-					$ntreu14$elm_stack$Stack$pop(stack).b).b)) : $author$project$MergeSort$merge(
-			A2(
-				$ntreu14$elm_stack$Stack$push,
-				leftSplitList,
-				$author$project$MergeSort$split(
-					$ntreu14$elm_stack$Stack$pop(stack).b)));
+					$ntreu14$elm_stack$Stack$push,
+					A2(
+						$author$project$MergeSort$SplitList,
+						A3(
+							$elm$core$List$foldl,
+							F2(
+								function (x, a) {
+									return A3(
+										$author$project$MergeSort$mergeItem,
+										leftSplitList.list,
+										x,
+										_Utils_update(
+											a,
+											{updated: false}));
+								}),
+							A3($author$project$MergeSort$SortedList, _List_Nil, 0, false),
+							rightSplitList.list).slist,
+						$author$project$MergeSort$SORTED),
+					$ntreu14$elm_stack$Stack$pop(
+						$ntreu14$elm_stack$Stack$pop(param.a).b).b),
+				A2($elm$core$List$cons, param.a, param.b))) : $author$project$MergeSort$merge(
+			_Utils_Tuple2(
+				A2(
+					$ntreu14$elm_stack$Stack$push,
+					leftSplitList,
+					$author$project$MergeSort$split(
+						_Utils_Tuple2(
+							$ntreu14$elm_stack$Stack$pop(param.a).b,
+							A2($elm$core$List$cons, param.a, param.b))).a),
+				A2($elm$core$List$cons, param.a, param.b)));
 	} else {
-		return stack;
+		return param;
 	}
 };
+var $ntreu14$elm_stack$Stack$toList = function (_v0) {
+	var xs = _v0.b;
+	return xs;
+};
 var $author$project$MergeSort$mergeSort = function (ul) {
-	return A2(
+	var hist = _List_Nil;
+	var output = $author$project$MergeSort$merge(
+		$author$project$MergeSort$split(
+			_Utils_Tuple2(
+				A2(
+					$ntreu14$elm_stack$Stack$push,
+					A2($author$project$MergeSort$SplitList, ul, $author$project$MergeSort$UNSORTED),
+					$ntreu14$elm_stack$Stack$empty),
+				hist)));
+	var sortedList = A2(
 		$elm$core$Maybe$withDefault,
 		A2($author$project$MergeSort$SplitList, _List_Nil, $author$project$MergeSort$SORTED),
-		$ntreu14$elm_stack$Stack$pop(
-			$author$project$MergeSort$merge(
-				$author$project$MergeSort$split(
-					A2(
-						$ntreu14$elm_stack$Stack$push,
-						A2($author$project$MergeSort$SplitList, ul, $author$project$MergeSort$UNSORTED),
-						$ntreu14$elm_stack$Stack$empty)))).a).list;
+		$ntreu14$elm_stack$Stack$pop(output.a).a).list;
+	var traj = A3(
+		$elm$core$List$foldl,
+		F2(
+			function (x, ao) {
+				return A2(
+					$elm$core$List$cons,
+					A3(
+						$elm$core$List$foldr,
+						F2(
+							function (y, ai) {
+								return A2($elm$core$List$cons, y.list, ai);
+							}),
+						_List_Nil,
+						$ntreu14$elm_stack$Stack$toList(x)),
+					ao);
+			}),
+		_List_Nil,
+		output.b);
+	return _Utils_Tuple2(sortedList, traj);
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {
@@ -5585,11 +5619,10 @@ var $author$project$Main$update = F2(
 								]))
 					});
 			default:
+				var sa = $author$project$MergeSort$mergeSort(model.array);
 				return _Utils_update(
 					model,
-					{
-						sortedArray: $author$project$MergeSort$mergeSort(model.array)
-					});
+					{hist: sa.b, sortedArray: sa.a});
 		}
 	});
 var $author$project$Main$AddToList = {$: 'AddToList'};
@@ -5661,6 +5694,7 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 };
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$core$Debug$toString = _Debug_toString;
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$view = function (model) {
 	var itemStrings = A2(
@@ -5732,6 +5766,24 @@ var $author$project$Main$view = function (model) {
 							$elm$core$String$join,
 							'    ',
 							A2($elm$core$List$map, $elm$core$String$fromInt, model.sortedArray)))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Path  :'),
+						$elm$html$Html$text(
+						A3(
+							$elm$core$List$foldl,
+							F2(
+								function (x, a) {
+									return a + ($elm$core$Debug$toString(x) + '====>');
+								}),
+							'',
+							model.hist)),
+						$elm$html$Html$text(
+						$elm$core$Debug$toString(model.sortedArray))
 					]))
 			]));
 };
